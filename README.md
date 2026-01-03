@@ -137,5 +137,3 @@ Example:
 ```
 Cannot parse limit with value abc into an integer.
 ```
-
----
