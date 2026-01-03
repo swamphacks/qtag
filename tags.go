@@ -1,5 +1,7 @@
 package qtag
 
+import "strings"
+
 type TagOptions struct {
 	Key     string  // "key" - Note: This will take the first key field in the tags array
 	Default *string // "default=..."
@@ -13,14 +15,14 @@ func parseTags(tags string) TagOptions {
 		Ignore:  false,
 	}
 
-	parts := split(tags, ',')
+	parts := strings.Split(tags, ",")
 	if len(parts) == 0 {
 		opts.Ignore = true
 		return opts
 	}
 
 	for _, p := range parts {
-		if kv := split(p, '='); len(kv) == 2 && kv[0] == "default" {
+		if kv := strings.Split(p, "="); len(kv) == 2 && kv[0] == "default" {
 			opts.Default = &kv[1]
 		} else if p == "-" {
 			opts.Ignore = true
@@ -35,20 +37,4 @@ func parseTags(tags string) TagOptions {
 	}
 
 	return opts
-}
-
-func split(s string, sep byte) []string {
-	out := make([]string, 0)
-	last := 0
-
-	for i := 0; i < len(s); i++ {
-		if s[i] == sep {
-			if last < i {
-				out = append(out, s[last:i])
-			}
-			last = i + 1
-		}
-	}
-
-	return out
 }
