@@ -3,7 +3,7 @@
 
 `qtag` is a small, reflection-based Go package for decoding HTTP query parameters into strongly-typed structs using struct tags.
 
-It is designed to be minimal, dependency-free, and ergonomic—similar in spirit to `encoding/json`, but for `url.Values`.
+It is designed to be minimal, dependency-free, and ergonomic.
 
 > ⚠️ **Warning**
 > This package is still under active development. APIs, behavior, and tag syntax may change.
