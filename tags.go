@@ -8,11 +8,25 @@ type TagOptions struct {
 	Ignore  bool    // "-"
 }
 
+// parseTags parses the "qt" struct tag string into a TagOptions struct.
+// It extracts the primary query key, any default values, and ignore directives.
+//
+// Behavior:
+//   - Empty tag (""): Returns an empty Key with Ignore set to false. This signals
+//     the decoder to flatten the field if it's a struct, or skip it if it's a base type.
+//   - Ignore tag ("-"): Returns Ignore set to true. The decoder will skip this field.
+//   - Standard tag ("name,default=10"): Extracts "name" as the Key and "10" as the Default.
+//   - Options without a key (",default=10"): Leaves Key empty but still parses the options.
 func parseTags(tags string) TagOptions {
 	opts := TagOptions{
 		Key:     "",
 		Default: nil,
 		Ignore:  false,
+	}
+
+	// No tags or qt is empty
+	if tags == "" {
+		return opts
 	}
 
 	parts := strings.Split(tags, ",")
@@ -31,9 +45,10 @@ func parseTags(tags string) TagOptions {
 		}
 	}
 
-	// Handle empty key values etc
-	if opts.Key == "" {
-		opts.Ignore = true
+	// If ignored, reset state
+	if opts.Ignore {
+		opts.Key = ""
+		opts.Default = nil
 	}
 
 	return opts
